@@ -1,0 +1,30 @@
+---
+title: "Analyses"
+subtitle: "Conducting statistical analyses to test hypotheses"
+---
+
+## Introduction
+
+This is where I will conduct my analyses
+
+## Descriptive Statistics
+
+Perhaps some descriptive statistics would be useful here.
+
+```{r}
+source("R/libraries.R")
+source("R/functions.R")
+load("data/validation_final.Rdata")
+
+df |>
+    group_by(sex_factor) |>
+    summarize(mean(job_knowledge_total))
+```
+
+## Inferential Statistics
+
+Some simple statistics are presented below to evaluate the data.
+
+```{r}
+t.test(job_knowledge_total ~ sex_factor, data = df)
+```

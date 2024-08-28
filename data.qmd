@@ -1,0 +1,84 @@
+---
+title: "Data"
+subtitle: "For importing, cleaning, and manipulating datasets."
+---
+
+```{r}
+#| echo: false
+#| message: false
+source("R/libraries.R")
+source("R/functions.R")
+```
+
+## Introduction
+
+Here's where I will import my data, clean it for processing, and manipulate or recode variables to my liking. This might also be a good place to link to the codebook or repeat the contents of the codebook here.
+
+## Data Import
+
+Time to import my data and get to work!
+
+```{r}
+df_raw <- read.csv("data/validation.csv", header = T)
+
+# Create a sample dataframe
+df <- data.frame(
+  sex = c(1,2,1,2),
+  pas = c(0,1,0,1)
+)
+
+df <- df %>% 
+    set_variable_labels(
+    sex = "Participant sex", 
+    pas = "Passed test"
+    ) %>%
+    set_value_labels(
+        sex = c(
+            Male = 1, 
+            Female = 2,
+            Missing = -9
+            ), 
+        pas = c(
+            Fail = 0, 
+            Pass = 1
+            )
+            )
+
+memisc::codebook(df)
+```
+
+## Data Cleaning
+
+This is a good place to handle missing data or de-identify data.
+
+```{r}
+df <- df_raw |>
+    select(-id)
+```
+
+## Data Manipulation
+
+Every good dataset needs some averages or sums, and we all need to recode a variable or two.
+
+``` {r}
+df <- df |>
+    rowwise() |>
+    mutate(job_knowledge_total = sum(jk1,jk2,jk3)) |>
+    ungroup() |>
+    mutate(job_knowledge_quintile = ntile(job_knowledge_total,5))
+
+df$sex_factor <- df$male |>
+    recode( 
+        `0` = "Female", 
+        `1` = "Male"
+        ) 
+```
+
+## Data Export
+
+People like to have their data in hand. Keeping it in an `.Rdata` file is great as you can keep the data labelled, but the `.csv` file is ubiquitous.
+
+``` {r}
+save(df, file = "data/validation_final.Rdata")
+write.csv(df, "data/validation_final.csv")
+```

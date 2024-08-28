@@ -1,0 +1,19 @@
+project:
+  type: book
+  output-dir: "_html"
+
+book:
+  title: "Project"
+  subtitle: "This is the documentation for a project"
+  author: "AJ Thurston"
+  date: "2024-08-22"
+  chapters:
+    - index.qmd
+    - data.qmd
+    - analyses.qmd
+    - figures.qmd
+
+format:
+  html: 
+    embed-resources: true
+  pdf: default

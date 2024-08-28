@@ -1,0 +1,49 @@
+---
+title: "Introduction"
+subtitle: "This is the introduction and setup to a project"
+---
+
+## Introduction
+
+This is an introduction to the project. This is also the landing page to your book if you chose to publish it. The purpose of this page is to introduce your reader to the project itself, perhaps provide some early documentation of the variables and values of your data, and any idiosyncracies of the analysis itself.
+
+## Notes
+
+This section can be helpful for documenting idioscynracies of your data, such as:
+
+- Special considerations of the analysis
+- Why these analysis were conducted 
+- When these analyses were conducted
+
+For meta-analysis, a PRISMA statment might be useful here.
+
+## Session
+
+For reproducible results, it might also be helpful to have your 'sessionInfo()' documented up front like so:
+
+```{r}
+sessionInfo()
+```
+
+## Libraries
+
+Quarto documents are designed to be standalone, meaning they don't share a global environment. Quarto follows the 'Knit and Merge' workflow, so each document is run, its outputs produced, and everything is then merged. Therefore, we will need to call in any libraries, functions, or data for each document. Functions and data can be stored in the `.Rdata` file, libraries cannot. In each document you will either need to call the `library()` function or source them from a seperate file. Here I've chosen to store them seperately in the `R/libraries.R` script.
+
+## Functions
+
+You may also want to include custom functions. Here I have a simply custom function to round up from .5, which is necessary as the default {round} function rounds to the nearest even digit according to IEC 60559.
+
+These functions can be in blocks below, or as separate R scripts.
+
+```{r functions}
+nround <- function(values, digits) {
+  factor <- 10^digits
+  is_neg <- ifelse(values < 0, -1, 1)
+  result <- is_neg*floor(abs(values)*factor+.5)/factor
+  return(result)
+}
+```
+
+``` {r}
+save(nround, file = "data/Project.Rdata")
+```
